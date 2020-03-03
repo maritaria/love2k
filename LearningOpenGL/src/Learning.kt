@@ -1,6 +1,7 @@
-import GlDataType.GlFloat
-import GlIndicesMode.Triangles
 import ModelVertex.Layout
+import love2k.*
+import love2k.GlDataType.GlFloat
+import love2k.GlIndicesMode.Triangles
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
