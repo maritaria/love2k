@@ -1,9 +1,12 @@
+import GlDataType.GlFloat
+import GlIndicesMode.Triangles
+import ModelVertex.Layout
 import org.lwjgl.glfw.GLFW.*
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11
-import org.lwjgl.opengl.GL20
 import org.lwjgl.opengl.GL33.*
 import org.lwjgl.system.MemoryUtil.NULL
+import java.nio.ByteBuffer
 
 fun main() {
     glfwInit()
@@ -46,10 +49,8 @@ fun main() {
             glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
             // Perform render
             shader.activate()
-            glBindVertexArray(triangle)
             glBindTexture(GL_TEXTURE_2D, texture.id);
-            // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE)
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0)
+            triangle.render()
 
             glfwSwapBuffers(window)
             glfwPollEvents()
@@ -63,47 +64,47 @@ fun handleFramebufferResize(window: Long, width: Int, height: Int) {
     glViewport(0, 0, width, height)
 }
 
-fun setupTriangle(): Int {
-    // Triangle data
-    val vertices = floatArrayOf(
-        // positions          // colors           // texture coords
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f,   // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f,   // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,   // bottom left
-        -0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f    // top left
+class ModelVertex(val pos: Vector, val color: Vector, val uv: Vector) : Vertex {
+    constructor(x: Float, y: Float, z: Float, r: Float, g: Float, b: Float, u: Float, v: Float)
+            : this(Vector(x, y, z), Vector(r, g, b), Vector(u, v, 0f))
+
+    override fun writeIntoBuffer(buffer: ByteBuffer) {
+        buffer.putFloat(pos.x)
+        buffer.putFloat(pos.y)
+        buffer.putFloat(pos.z)
+        buffer.putFloat(color.x)
+        buffer.putFloat(color.y)
+        buffer.putFloat(color.z)
+        buffer.putFloat(uv.x)
+        buffer.putFloat(uv.y)
+    }
+
+    class Layout : VertexLayout<ModelVertex>() {
+        override val attributes: Sequence<VertexAttribute>
+            get() = listOf(
+                VertexAttribute(GlFloat, 3),
+                VertexAttribute(GlFloat, 3),
+                VertexAttribute(GlFloat, 2)
+            ).asSequence()
+    }
+}
+
+fun setupTriangle(): Mesh<ModelVertex> {
+    return Mesh(
+        Layout(),
+        listOf(
+            ModelVertex(0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f),
+            ModelVertex(0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f),
+            ModelVertex(-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f),
+            ModelVertex(-0.5f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f)
+        ),
+        // TODO: Replace with (triangle) builder pattern
+        Triangles,
+        intArrayOf(
+            0, 1, 3,   // first triangle
+            1, 2, 3    // second triangle
+        )
     )
-    val indices = intArrayOf(
-        0, 1, 3,   // first triangle
-        1, 2, 3    // second triangle
-    )
-    // VAO
-    val vao = glGenVertexArrays()
-    glBindVertexArray(vao)
-    // VBO
-    val vbo = glGenBuffers()
-    glBindBuffer(GL_ARRAY_BUFFER, vbo)
-    glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW)
-
-
-    // Vertex buffer layout
-    glVertexAttribPointer(0, 3, GL_FLOAT, false, 8 * 4, 0)
-    glEnableVertexAttribArray(0)
-    glVertexAttribPointer(1, 3, GL_FLOAT, false, 8 * 4, 3 * 4)
-    glEnableVertexAttribArray(1)
-    glVertexAttribPointer(2, 2, GL_FLOAT, false, 8 * 4, 6 * 4)
-    glEnableVertexAttribArray(2)
-
-
-    val ebo = glGenBuffers()
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo)
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
-    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-
-    glBindVertexArray(0)
-    glDisableVertexAttribArray(2)
-    glBindBuffer(GL_ARRAY_BUFFER, 0)
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0)
-    return vao
 }
 
 fun setupShader(): ShaderProgram {

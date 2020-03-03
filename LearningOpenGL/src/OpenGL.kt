@@ -1,7 +1,8 @@
-import org.lwjgl.opengl.GL11
+import GlDataType.GlFloat
 import org.lwjgl.opengl.GL33.*
 import org.lwjgl.stb.STBImage
 import org.lwjgl.system.MemoryStack
+import org.lwjgl.system.MemoryUtil.memAlloc
 import java.nio.ByteBuffer
 
 interface GraphicsHandle : AutoCloseable {
@@ -109,27 +110,35 @@ interface Vertex {
 }
 
 class VectorVertex(val vector: Vector) : Vertex {
+    constructor(x: Float, y: Float, z: Float) : this(Vector(x, y, z))
+
     override fun writeIntoBuffer(buffer: ByteBuffer) {
         buffer.putFloat(vector.x);
         buffer.putFloat(vector.y);
         buffer.putFloat(vector.z);
     }
+
+    class Layout : VertexLayout<VectorVertex>() {
+        override val attributes: Sequence<VertexAttribute>
+            get() = listOf(VertexAttribute(GlFloat, 3)).asSequence()
+
+    }
 }
 
-enum class GlDataType(val value: kotlin.Int, val size: kotlin.Int, val normalized: Boolean = false) {
-    Byte(GL11.GL_BYTE, 1),
-    UByte(GL11.GL_UNSIGNED_BYTE, 1),
-    Short(GL11.GL_SHORT, 2),
-    UShort(GL11.GL_UNSIGNED_SHORT, 2),
-    Int(GL11.GL_INT, 4),
-    UInt(GL11.GL_UNSIGNED_INT, 4),
-    Float(GL11.GL_FLOAT, 4),
-    NFloat(GL11.GL_FLOAT, 4, normalized = true),
-    Double(GL11.GL_DOUBLE, 8),
-    NDouble(GL11.GL_DOUBLE, 8, normalized = true),
-    Bytes2(GL11.GL_2_BYTES, 2),
-    Bytes3(GL11.GL_3_BYTES, 3),
-    Bytes4(GL11.GL_4_BYTES, 4),
+enum class GlDataType(val value: Int, val size: Int, val normalized: Boolean = false) {
+    GlByte(GL_BYTE, 1),
+    GlUByte(GL_UNSIGNED_BYTE, 1),
+    GlShort(GL_SHORT, 2),
+    GlUShort(GL_UNSIGNED_SHORT, 2),
+    GlInt(GL_INT, 4),
+    GlUInt(GL_UNSIGNED_INT, 4),
+    GlFloat(GL_FLOAT, 4),
+    GlFloatNormalized(GL_FLOAT, 4, normalized = true),
+    GlDouble(GL_DOUBLE, 8),
+    GlDoubleNormalized(GL_DOUBLE, 8, normalized = true),
+    GlBytes2(GL_2_BYTES, 2),
+    GlBytes3(GL_3_BYTES, 3),
+    GlBytes4(GL_4_BYTES, 4),
 }
 
 enum class GlIndicesMode(val mode: Int) {
@@ -148,6 +157,8 @@ enum class GlIndicesMode(val mode: Int) {
 
 abstract class VertexLayout<VertexType : Vertex> {
     protected abstract val attributes: Sequence<VertexAttribute>
+    val attributeCount: Int
+        get() = attributes.count()
     private val stride: Int
         get() = attributes.sumBy { entry -> entry.size }
 
@@ -157,7 +168,6 @@ abstract class VertexLayout<VertexType : Vertex> {
         val attributes = this.attributes
         var offset: Long = 0;
         attributes.forEachIndexed { index, vertexAttribute ->
-            offset += vertexAttribute.size
             glVertexAttribPointer(
                 index,
                 vertexAttribute.itemCount,
@@ -166,21 +176,23 @@ abstract class VertexLayout<VertexType : Vertex> {
                 stride,
                 offset
             )
+            glEnableVertexAttribArray(index)
+            offset += vertexAttribute.size
             // Apparently we can also directly pass the data
         }
     }
 
     fun buildDataBuffer(vertices: Collection<VertexType>): ByteBuffer {
         val stride = stride
-        val buffer = ByteBuffer.allocateDirect(stride * vertices.size)
-        vertices.forEachIndexed { index, vertex ->
+        val buffer = memAlloc(stride * vertices.size)
+        vertices.forEach { vertex ->
             val posBefore = buffer.position()
             vertex.writeIntoBuffer(buffer)
             val posAfter = buffer.position()
             val posDelta = posAfter - posBefore
             check(posDelta == stride) { "Incorrect number of bytes written to buffer by element, stride: $stride, actual: $posDelta" }
         }
-        return buffer
+        return buffer.flip()
     }
 
     protected class VertexAttribute(val dataType: GlDataType, val itemCount: Int) {
@@ -192,21 +204,20 @@ class Mesh<T : Vertex>(
     private val layout: VertexLayout<T>,
     vertices: Collection<T>,
     private val indexLayout: GlIndicesMode,
-    triangles: IntArray
+    indices: IntArray
 ) : GraphicsHandle {
     override val id: Int = glGenVertexArrays()
     private val vertexBufferId: Int = glGenBuffers()
     private val elementsBufferId: Int = glGenBuffers()
-    private val indicesLength: Int = triangles.size
+    private val indicesLength: Int = indices.size
 
     init {
         glBindVertexArray(id)
-        layout.uploadAttributeLayout()
         glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId)
         glBufferData(GL_ARRAY_BUFFER, layout.buildDataBuffer(vertices), GL_STATIC_DRAW)
-
+        layout.uploadAttributeLayout()
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementsBufferId)
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, triangles, GL_STATIC_DRAW)
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW)
 
         glBindVertexArray(0)
         glBindBuffer(GL_ARRAY_BUFFER, 0)
