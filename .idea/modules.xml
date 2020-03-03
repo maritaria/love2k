@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/KotlinPong.iml" filepath="$PROJECT_DIR$/KotlinPong.iml" />
+      <module fileurl="file://$PROJECT_DIR$/KotlinPong/KotlinPong.iml" filepath="$PROJECT_DIR$/KotlinPong/KotlinPong.iml" />
       <module fileurl="file://$PROJECT_DIR$/LearningOpenGL/LearningOpenGL.iml" filepath="$PROJECT_DIR$/LearningOpenGL/LearningOpenGL.iml" />
     </modules>
   </component>
