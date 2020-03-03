@@ -1,23 +1,21 @@
 package love2k
 
-import Vector
 import love2k.GlDataType.GlFloat
-import org.lwjgl.opengl.GL15
 import org.lwjgl.opengl.GL30.*
 import org.lwjgl.system.MemoryUtil
 import java.nio.ByteBuffer
 
 interface Vertex {
-    fun writeIntoBuffer(buffer: ByteBuffer);
+    fun writeIntoBuffer(buffer: ByteBuffer)
 }
 
 class VectorVertex(val vector: Vector) : Vertex {
     constructor(x: Float, y: Float, z: Float) : this(Vector(x, y, z))
 
     override fun writeIntoBuffer(buffer: ByteBuffer) {
-        buffer.putFloat(vector.x);
-        buffer.putFloat(vector.y);
-        buffer.putFloat(vector.z);
+        buffer.putFloat(vector.x)
+        buffer.putFloat(vector.y)
+        buffer.putFloat(vector.z)
     }
 
     class Layout : VertexLayout<VectorVertex>() {
@@ -38,7 +36,7 @@ abstract class VertexLayout<VertexType : Vertex> {
     fun uploadAttributeLayout() {
         // Cache in case the implementation
         val attributes = this.attributes
-        var offset: Long = 0;
+        var offset: Long = 0
         attributes.forEachIndexed { index, vertexAttribute ->
             glVertexAttribPointer(
                 index,
@@ -68,7 +66,7 @@ abstract class VertexLayout<VertexType : Vertex> {
     }
 
     protected class VertexAttribute(val dataType: GlDataType, val itemCount: Int) {
-        val size: Int = dataType.size * itemCount;
+        val size: Int = dataType.size * itemCount
     }
 }
 

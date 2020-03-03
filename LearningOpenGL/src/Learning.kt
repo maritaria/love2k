@@ -23,7 +23,7 @@ fun main() {
         glfwSetFramebufferSizeCallback(window, ::handleFramebufferResize)
 
         val caps = GL.createCapabilities()
-        println("Supports direct state: ${caps.GL_ARB_direct_state_access}");
+        println("Supports direct state: ${caps.GL_ARB_direct_state_access}")
 
         println("-- OpenGL Driver info --")
         println("Version: ${glGetString(GL_VERSION)}")
@@ -47,10 +47,10 @@ fun main() {
             glClearColor(0.2f, 0.3f, 0.3f, 1.0f)
             glClear(GL_COLOR_BUFFER_BIT)
 
-            glColor4f(1.0f, 0.0f, 0.0f, 1.0f);
+            glColor4f(1.0f, 0.0f, 0.0f, 1.0f)
             // Perform render
             shader.activate()
-            glBindTexture(GL_TEXTURE_2D, texture.id);
+            glBindTexture(GL_TEXTURE_2D, texture.id)
             triangle.render()
 
             glfwSwapBuffers(window)
@@ -67,7 +67,11 @@ fun handleFramebufferResize(window: Long, width: Int, height: Int) {
 
 class ModelVertex(val pos: Vector, val color: Vector, val uv: Vector) : Vertex {
     constructor(x: Float, y: Float, z: Float, r: Float, g: Float, b: Float, u: Float, v: Float)
-            : this(Vector(x, y, z), Vector(r, g, b), Vector(u, v, 0f))
+            : this(
+        Vector(x, y, z),
+        Vector(r, g, b),
+        Vector(u, v, 0f)
+    )
 
     override fun writeIntoBuffer(buffer: ByteBuffer) {
         buffer.putFloat(pos.x)

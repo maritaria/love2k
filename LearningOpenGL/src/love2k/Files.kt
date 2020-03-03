@@ -1,3 +1,5 @@
+package love2k
+
 import org.lwjgl.BufferUtils
 import org.lwjgl.opengl.GL
 import org.lwjgl.opengl.GL11.GL_RGB
@@ -22,7 +24,7 @@ fun loadResource(path: String): ByteBuffer {
                 }
             }
             buffer.flip()
-            return buffer;
+            return buffer
         }
     }
 
@@ -58,7 +60,7 @@ fun loadImage(path: String): ImageBlob {
         if (pixels == null) {
             throw RuntimeException("Failed to load image: " + STBImage.stbi_failure_reason()!!)
         } else {
-            return ImageBlob(pixels, w.get(0), h.get(0), components.get(0));
+            return ImageBlob(pixels, w.get(0), h.get(0), components.get(0))
         }
     }
 }
