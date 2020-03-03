@@ -1,0 +1,53 @@
+<component name="libraryTable">
+  <library name="lwjgl">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-assimp-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-assimp.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-bgfx-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-bgfx.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-glfw-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-glfw.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nanovg-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nanovg.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nuklear-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nuklear.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-opengl-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-opengl.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-par-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-par.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-stb-natives-windows.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-stb.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-vulkan.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-assimp-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-bgfx-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-glfw-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nanovg-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nuklear-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-opengl-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-par-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-stb-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-vulkan-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-assimp-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-bgfx-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-glfw-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nanovg-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-nuklear-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-openal-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-opengl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-par-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-stb-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/libs/lwjgl-vulkan-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
